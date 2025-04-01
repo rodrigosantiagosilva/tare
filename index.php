@@ -22,52 +22,55 @@ $errorMiddleware->setErrorHandler(HttpNotFoundException::class, function (
     $response->getBody()->write('{"error": "deu erro"}');
     return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
 });
- 
-$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-    $name = $args['name'];
-    $response->getBody()->write("Hello, $name");
-    return $response;
-});
-$app->get('/tarefas', function (Request $request, Response $response, array $args) {
+$app->get('/usuarios/{id}', function (Request $request, Response $response, array $args) {
     $tarefas =[
-        ["id" => 1,"titulo" =>"ler a documentação do Slim","concluido"=> false],
-        ["id" => 2,"titulo" =>"ler alguma coisa ","concluido"=>false],
-        ["id" => 3,"titulo" =>"fazer alguma coisa ","concluido"=>false],
-        ["id" => 4,"titulo" =>"ser alguma coisa ","concluido"=>false],
+        ["id" => 1,"nome" =>"Usuario 1","admin"=>false,"senha" =>"1534"],
+        ["id" => 2,"nome" =>"Usuario 2","admin"=>false,"senha" =>"1334"],
+        ["id" => 3,"nome" =>"Usuario 3","admin"=>true,"senha" =>"1214"],
+        ["id" => 4,"nome" =>"Usuario 4","admin"=>false,"senha" =>"1224"],
     ];
     $response->getBody()->write(json_encode($tarefas));
     return $response->withHeader('Content-Type','application/json');
 });
-$app->post('/tarefas', function (Request $request, Response $response, array $args) {
+$app->post('/usuarios', function (Request $request, Response $response, array $args) {
     $parametros =(array) $request ->getParsedBody();
-    if(!array_key_exists('titulo',$parametros) || empty($parametros['titulo'])){
+    if(!array_key_exists('nome',$parametros) || empty($parametros['nome'])){
         $response->getBody()->write(json_encode([
-            "mensagem" => "titulo obrigatorio"
+            "mensagem" => "nome obrigatorio"
         ]));
     }
     return $response->withStatus(201);
 
 });
 
-$app->delete('/tarefas/{id}', function (Request $request, Response $response, array $args) {
+$app->delete('/usuarios/{id}', function (Request $request, Response $response, array $args) {
     $id = $args['id'];
     return $response->withStatus(204);
 });
-$app->put('/tarefas/{id}', function (Request $request, Response $response, array $args) {
+$app->put('/usuarios/{id}', function (Request $request, Response $response, array $args) {
     $id = $args['id'];
     $dados_para_atualizar = (array) $request->getParsedBody();
     var_dump($dados_para_atualizar);
-    if(array_key_exists('titulo',$dados_para_atualizar) && empty($dados_para_atualizar['titulo'])){
+    if(array_key_exists('nome',$dados_para_atualizar) && empty($dados_para_atualizar['nome'])){
         $response->getBody()->write(json_encode([
-            "mensagem" => "titulo é obrigatorio"
+            "mensagem" => "nome é obrigatorio"
         ]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
     }
     return $response->withStatus(201);
-
-
-
-
+});
+ 
+$app->put('/usuarios/{id}', function (Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $dados_para_atualizar = (array) $request->getParsedBody();
+    var_dump($dados_para_atualizar);
+    if(array_key_exists('senha',$dados_para_atualizar) && empty($dados_para_atualizar['senha'])){
+        $response->getBody()->write(json_encode([
+            "mensagem" => "senha é obrigatorio"
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+    }
+    return $response->withStatus(201);
 });
  
 $app->run();
