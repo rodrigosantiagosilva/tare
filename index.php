@@ -5,6 +5,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Factory\AppFactory;
+use RodrigoSilva14\Tarefas\Service\TarefaService;
  
 require __DIR__ . '/vendor/autoload.php';
  
@@ -22,31 +23,36 @@ $errorMiddleware->setErrorHandler(HttpNotFoundException::class, function (
     $response->getBody()->write('{"error": "deu erro"}');
     return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
 });
-$app->get('/usuarios/{id}', function (Request $request, Response $response, array $args) {
-    $tarefas =[
-        ["id" => 1,"nome" =>"Usuario 1","admin"=>false,"senha" =>"1534"],
-        ["id" => 2,"nome" =>"Usuario 2","admin"=>false,"senha" =>"1334"],
-        ["id" => 3,"nome" =>"Usuario 3","admin"=>true,"senha" =>"1214"],
-        ["id" => 4,"nome" =>"Usuario 4","admin"=>false,"senha" =>"1224"],
-    ];
+$app->get('/tarefas', function (Request $request, Response $response, array $args) {
+    $tarefa_service = new TarefaService();
+    $tarefas = $tarefa_service -> getAllTarefas();
+
     $response->getBody()->write(json_encode($tarefas));
     return $response->withHeader('Content-Type','application/json');
 });
-$app->post('/usuarios', function (Request $request, Response $response, array $args) {
+
+
+$app->post('/tarefas', function (Request $request, Response $response, array $args) {
     $parametros =(array) $request ->getParsedBody();
-    if(!array_key_exists('nome',$parametros) || empty($parametros['nome'])){
+
+    if(!array_key_exists('titulo',$parametros) || empty($parametros['titulo'])){
         $response->getBody()->write(json_encode([
-            "mensagem" => "nome obrigatorio"
+            "mensagem" => "titulo obrigatorio"
         ]));
     }
+    $modelo = array_merge(['titulo' =>'','concluido' =>false],$parametros);
+    $tarefa_service = new TarefaService();
+    $tarefa_service ->createTarefa($parametros);
     return $response->withStatus(201);
-
 });
+
+
 
 $app->delete('/usuarios/{id}', function (Request $request, Response $response, array $args) {
     $id = $args['id'];
     return $response->withStatus(204);
 });
+
 $app->put('/usuarios/{id}', function (Request $request, Response $response, array $args) {
     $id = $args['id'];
     $dados_para_atualizar = (array) $request->getParsedBody();
@@ -60,17 +66,6 @@ $app->put('/usuarios/{id}', function (Request $request, Response $response, arra
     return $response->withStatus(201);
 });
  
-$app->put('/usuarios/{id}', function (Request $request, Response $response, array $args) {
-    $id = $args['id'];
-    $dados_para_atualizar = (array) $request->getParsedBody();
-    var_dump($dados_para_atualizar);
-    if(array_key_exists('senha',$dados_para_atualizar) && empty($dados_para_atualizar['senha'])){
-        $response->getBody()->write(json_encode([
-            "mensagem" => "senha é obrigatorio"
-        ]));
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
-    }
-    return $response->withStatus(201);
-});
+ 
  
 $app->run();
