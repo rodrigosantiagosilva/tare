@@ -4,7 +4,7 @@ namespace RodrigoSilva14\Tarefas\Service;
  
 class TarefaService
 {
-    private $filePath = __DIR__ . '/../data.json';
+    private $filePath = __DIR__ . '../../../data_tarefa.json';
  
     private function readData()
     {
@@ -20,7 +20,7 @@ class TarefaService
         file_put_contents($this->filePath, json_encode($data, JSON_PRETTY_PRINT));
     }
  
-    private function createTarefa($tarefa)
+    public function createTarefa($tarefa)
     {
         $data = $this->readData();
         $tarefa['id'] = uniqid();

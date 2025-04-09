@@ -48,12 +48,12 @@ $app->post('/tarefas', function (Request $request, Response $response, array $ar
 
 
 
-$app->delete('/usuarios/{id}', function (Request $request, Response $response, array $args) {
+$app->delete('/tarefas/{id}', function (Request $request, Response $response, array $args) {
     $id = $args['id'];
     return $response->withStatus(204);
 });
 
-$app->put('/usuarios/{id}', function (Request $request, Response $response, array $args) {
+$app->put('/tarefas/{id}', function (Request $request, Response $response, array $args) {
     $id = $args['id'];
     $dados_para_atualizar = (array) $request->getParsedBody();
     var_dump($dados_para_atualizar);
