@@ -1,10 +1,8 @@
 [
     {
-        "titulo": "AAAAAAAAAAAAAAAAAAA",
-        "id": "67f6c0696c652"
-    },
-    {
-        "titulo": "AAAAAAAAAAAAAAAAAAA",
-        "id": "67f6c06c18c16"
+        "titulo": "descascar batatas",
+        "caracteristica": "muto dificil",
+        "estado": "feito",
+        "id": "67feabe3d7f54"
     }
 ]

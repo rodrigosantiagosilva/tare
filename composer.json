@@ -1,5 +1,5 @@
 {
-    "name": "rodrigo.silva14/tarefas",
+    "name": "rodrigo.silva/projetux",
     "type": "project",
     "require": {
         "slim/slim": "^4.14",
@@ -8,7 +8,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RodrigoSilva14\\Tarefas\\": "src/"
+            "Projetux\\": "src/"
         }
     },
     "require-dev": {
